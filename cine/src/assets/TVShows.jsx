@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { searchMovies /* or searchSeries */ } from './api';
+import { searchMovies } from './api';
 import { Link } from 'react-router-dom';
 
 const Movies = () => {
