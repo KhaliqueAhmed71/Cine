@@ -7,11 +7,12 @@ import Navbar from './assets/Navbar';
 import Movies from './assets/Movies';
 import TVShows from './assets/TVShows';
 import SearchResults from './assets/SearchResults';
-
+import './App.css'
+import './index.css'
 
 const App = () => {
   return (
-    <div className="bg-background text-lightText min-h-screen">
+    <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen font-sans">
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -20,7 +21,6 @@ const App = () => {
         <Route path="/movies" element={<Movies />} />
         <Route path="/tv" element={<TVShows />} />
         <Route path="/search" element={<SearchResults />} />
-
       </Routes>
     </div>
   );

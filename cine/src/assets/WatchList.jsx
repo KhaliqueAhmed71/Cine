@@ -6,35 +6,25 @@ const WatchList = () => {
   const { watchlist, removeFromWatchlist } = useWatchlist();
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2 style={{ fontSize: '24px', marginBottom: '20px' }}>My Watchlist</h2>
-
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans p-6">
+      <h2 className="text-2xl mb-6">My Watchlist</h2>
       {watchlist.length === 0 ? (
         <p>No movies added yet.</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }}>
-          {watchlist.map((movie) => (
-            <div key={movie.imdbID} style={{ backgroundColor: '#2e2e2e', padding: '10px', borderRadius: '8px' }}>
-              <Link to={`/movie/${movie.imdbID}`}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          {watchlist.map(m => (
+            <div key={m.imdbID} className="bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden">
+              <Link to={`/movie/${m.imdbID}`}>
                 <img
-                  src={movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450?text=No+Image'}
-                  alt={movie.Title}
-                  style={{ width: '100%', borderRadius: '4px' }}
+                  src={m.Poster !== 'N/A' ? m.Poster : 'https://via.placeholder.com/300x450?text=No+Image'}
+                  alt={m.Title}
+                  className="w-full h-64 object-cover"
                 />
-                <p style={{ marginTop: '10px', textAlign: 'center' }}>{movie.Title}</p>
+                <p className="p-2 text-center">{m.Title}</p>
               </Link>
               <button
-                onClick={() => removeFromWatchlist(movie.imdbID)}
-                style={{
-                  marginTop: '10px',
-                  backgroundColor: '#e63946',
-                  color: '#fff',
-                  padding: '6px',
-                  border: 'none',
-                  borderRadius: '4px',
-                  width: '100%',
-                  cursor: 'pointer'
-                }}
+                onClick={() => removeFromWatchlist(m.imdbID)}
+                className="w-full py-2 bg-indigo-600 text-white hover:bg-indigo-700"
               >
                 Remove
               </button>

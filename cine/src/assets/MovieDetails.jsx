@@ -4,54 +4,32 @@ import { getMovieDetail } from './api';
 import { useWatchlist } from './WatchListContext';
 
 const MovieDetails = () => {
-  const { id } = useParams(); 
-  const [movie, setMovie] = useState(null);
+  const { id } = useParams();
+  const [m, setM] = useState(null);
   const { addToWatchlist } = useWatchlist();
 
   useEffect(() => {
-    getMovieDetail(id).then((res) => setMovie(res.data));
+    getMovieDetail(id).then(res => setM(res.data));
   }, [id]);
 
-  if (!movie) return <div style={{ padding: '20px' }}>Loading...</div>;
-  if (movie.Response === 'False') return <div style={{ padding: '20px' }}>Movie not found.</div>;
+  if (!m) return <div className="p-6 text-gray-900 dark:text-gray-100">Loading...</div>;
+  if (m.Response === 'False') return <div className="p-6 text-gray-900 dark:text-gray-100">Not found.</div>;
 
   return (
-    <div style={{ padding: '24px', fontFamily: 'Arial, sans-serif', color: '#eee', backgroundColor: '#1a1a1a' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
-
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans p-6 max-w-4xl mx-auto space-y-6">
+      <h1 className="text-3xl font-bold">{m.Title}</h1>
+      <div className="flex flex-col md:flex-row gap-6">
         <img
-          src={movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450?text=No+Image'}
-          alt={movie.Title}
-          style={{ width: '300px', borderRadius: '8px', objectFit: 'cover' }}
+          src={m.Poster !== 'N/A' ? m.Poster : 'https://via.placeholder.com/300x450?text=No+Image'}
+          alt={m.Title}
+          className="w-full md:w-64 object-cover rounded"
         />
-
-        <div style={{ flex: 1, minWidth: '250px' }}>
-          <h1 style={{ marginBottom: '10px', color: '#e63946' }}>{movie.Title}</h1>
-          <p><strong>Year:</strong> {movie.Year}</p>
-          <p><strong>Runtime:</strong> {movie.Runtime}</p>
-          <p><strong>Genre:</strong> {movie.Genre}</p>
-          <p><strong>Released:</strong> {movie.Released}</p>
-          <p><strong>Country:</strong> {movie.Country}</p>
-          <p><strong>Language:</strong> {movie.Language}</p>
-          <p><strong>IMDb Rating:</strong> {movie.imdbRating}</p>
-          <p><strong>Box Office:</strong> {movie.BoxOffice}</p>
-          <p><strong>Awards:</strong> {movie.Awards}</p>
-          <p><strong>Director:</strong> {movie.Director}</p>
-          <p><strong>Writer:</strong> {movie.Writer}</p>
-          <p><strong>Actors:</strong> {movie.Actors}</p>
-          <p style={{ marginTop: '16px' }}><strong>Plot:</strong> {movie.Plot}</p>
-
+        <div className="flex-1 space-y-2">
+          {['Plot','Genre','Released','Runtime','Country','Language','imdbRating','BoxOffice','Awards','Director','Writer','Actors']
+            .map(field => <p key={field}><strong>{field}:</strong> {m[field] || 'N/A'}</p>)}
           <button
-            onClick={() => addToWatchlist(movie)}
-            style={{
-              marginTop: '24px',
-              backgroundColor: '#e63946',
-              color: '#fff',
-              padding: '10px 16px',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
+            onClick={() => addToWatchlist(m)}
+            className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
           >
             Add to Watchlist
           </button>

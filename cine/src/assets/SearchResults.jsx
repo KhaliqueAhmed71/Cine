@@ -1,42 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import './Movies.css'; 
 
 const API_KEY = 'd5020016';
 
 const SearchResults = () => {
-  const [results, setResults] = useState([]);
-  const location = useLocation();
-  const query = new URLSearchParams(location.search).get('q');
+  const [items, setItems] = useState([]);
+  const q = new URLSearchParams(useLocation().search).get('q');
 
   useEffect(() => {
-    if (query) {
-      axios
-        .get(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`)
-        .then((res) => {
-          setResults(res.data.Search || []);
-        })
-        .catch((err) => console.error(err));
+    if (q) {
+      axios.get(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${q}`)
+        .then(res => setItems(res.data.Search || []));
     }
-  }, [query]);
+  }, [q]);
 
   return (
-    <div className="home-container">
-      <h2>Search results for: <strong>{query}</strong></h2>
-
-      {results.length === 0 ? (
-        <p className="no-movies">No results found.</p>
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans p-6">
+      <h2 className="text-xl mb-4">Results for: <span className="font-bold">{q}</span></h2>
+      {items.length === 0 ? (
+        <p>No results found.</p>
       ) : (
-        <div className="movies-grid" style={{ marginTop: '20px' }}>
-          {results.map((movie) => (
-            <Link to={`/movie/${movie.imdbID}`} key={movie.imdbID} className="movie-link">
-              <div className="movie-card">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {items.map(m => (
+            <Link key={m.imdbID} to={`/movie/${m.imdbID}`}>
+              <div className="bg-gray-200 dark:bg-gray-800 hover:shadow-lg hover:scale-105 transition transform rounded-lg overflow-hidden">
                 <img
-                  src={movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450?text=No+Image'}
-                  alt={movie.Title}
+                  src={m.Poster !== 'N/A' ? m.Poster : 'https://via.placeholder.com/300x450?text=No+Image'}
+                  alt={m.Title}
+                  className="w-full h-64 object-cover"
                 />
-                <p className="movie-title">{movie.Title}</p>
+                <p className="p-2 text-center">{m.Title}</p>
               </div>
             </Link>
           ))}
